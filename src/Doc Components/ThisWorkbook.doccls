@@ -1,0 +1,19 @@
+﻿Option Explicit
+
+Private Sub Workbook_Open()
+    OnWorkBookOpen
+End Sub
+
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+    If Not SaveAsUI Then
+        Cancel = Not ApplicationConfig.AllowWorkbookSave()
+    Else
+        Cancel = True
+    End If
+
+CleanExit:
+    Exit Sub
+
+CleanFail:
+    Resume CleanExit
+End Sub
