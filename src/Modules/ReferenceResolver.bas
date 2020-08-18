@@ -73,9 +73,9 @@ Public Function TryAddDllReference(ByVal guid As String, ByVal majorVersion As L
 End Function
 
 Public Sub DisplayReferenceError(ByVal developerName As String, ByVal developerEmailAddress As String)
-    MsgBox "An error occured while attempting to add External reference(s) required " &
-           "for this Application." & vbNewLine & vbNewLine &
-           "Please contact " & developerName & " at " & developerEmailAddress,
+    MsgBox "An error occured while attempting to add External reference(s) required " & _
+           "for this Application." & vbNewLine & vbNewLine & _
+           "Please contact " & developerName & " at " & developerEmailAddress, _
             vbCritical, vbNullString
 End Sub
 
@@ -88,7 +88,6 @@ Public Sub PrintAllReferences(ByVal project As Object)
     For Each ref In project.References
         If Not ref.BuiltIn Then
             PrintToImmediateWindow ref
-
         End If
     Next
 End Sub
