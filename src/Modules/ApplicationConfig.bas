@@ -26,17 +26,15 @@ Private Const ALT_KEY = &H12
 '*******************************************************************************
 
 Public Sub OnWorkBookOpen()
-    On Error GoTo CleanFail
-    If Not IsApplicationDeveloper(DEVELOPER_USERNAME) Then
-        If Not IsValidApplicationFileName(ThisWorkbook.name, WORKBOOK_NAME) Then ExitApp
-                                                
-        If Not ReferenceResolver.TryAddDllReferences(dllReference:=CommonDllVbProjectReference.AdoDbRef + CommonDllVbProjectReference.ScriptingRuntimeRef) _
-        Then
-            ReferenceResolver.DisplayReferenceError DEVELOPER_NAME, DEVELOPER_EMAIL
-            
-            ExitApp
-        End If
-    End If
+ 	On Error GoTo CleanFail
+	If Not IsValidApplicationFileName(ThisWorkbook.name, WORKBOOK_NAME) Then ExitApp
+
+	If Not ReferenceResolver.TryAddDllReferences(dllReference:=CommonDllVbProjectReference.AdoDbRef + CommonDllVbProjectReference.ScriptingRuntimeRef) _
+	Then
+	    ReferenceResolver.DisplayReferenceError DEVELOPER_NAME, DEVELOPER_EMAIL
+
+	    ExitApp
+	End If
     
 CleanExit:
     Exit Sub
