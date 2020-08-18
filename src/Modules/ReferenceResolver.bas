@@ -1,8 +1,8 @@
 Attribute VB_Name = "ReferenceResolver"
 '@Folder("ADODBDataAccess")
 '@ModuleDescription("Internal methods used to resolve commonly used references in a VBproject.")
-Option Explicit On
-Option OnPrivate Module
+Option Explicit 
+Option Private Module
 
 Public Enum CommonDllVbProjectReference
     AdoDbRef = 2 ^ 1
