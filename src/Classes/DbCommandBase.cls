@@ -84,6 +84,7 @@ End Function
 
 Private Sub AsycAwait(ByRef cmd As ADODB.Command)
     Do While ((cmd.State And ADODB.ObjectStateEnum.adStateExecuting) = ADODB.ObjectStateEnum.adStateExecuting)
+        DoEvents
     Loop
 End Sub
 
