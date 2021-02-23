@@ -13,10 +13,10 @@ Public Function NullIf(ByVal value As Variant, ByVal replacement As Variant) As 
     If VBA.IsNull(value) Then
         NullIf = replacement
     
-	Else
+    Else
         NullIf = value
     
-	End If
+    End If
 End Function
 
 Public Function IsNullOrEmpty(ByVal value As Variant, ByVal replacement As Variant) As Variant
@@ -25,10 +25,10 @@ Public Function IsNullOrEmpty(ByVal value As Variant, ByVal replacement As Varia
     Then
         IsNullOrEmpty = replacement
     
-	Else
+    Else
         IsNullOrEmpty = value
     
-	End If
+    End If
 End Function
 
 Public Function Coalesce(ParamArray args() As Variant) As Variant
@@ -41,9 +41,9 @@ Public Function Coalesce(ParamArray args() As Variant) As Variant
             result = args(i)
             Exit For
         
-		End If
+        End If
     
-	Next i
+    Next i
 
     Coalesce = result
 End Function
@@ -55,8 +55,8 @@ Public Function IsRecordsetOpen(ByVal rs As ADODB.Recordset) As Boolean
     If Not rs Is Nothing Then
         result = ((rs.State And ADODB.ObjectStateEnum.adStateOpen) = ADODB.ObjectStateEnum.adStateOpen)
     
-	End If
-
+    End If
+    
     IsRecordsetOpen = result
 End Function
 
@@ -155,7 +155,6 @@ Public Function GetNewDataFromRecordset(ByVal existingDataKvps As Scripting.Dict
             
         Next
         
-        
     End If
 
     If Not IsForwardOnlyCursor(rs.CursorType) Then
@@ -195,7 +194,7 @@ Optional ByVal includeKeyFieldInValues As Boolean = False) As Scripting.Dictiona
     Dim result As Scripting.Dictionary
     Set result = New Scripting.Dictionary
     result.CompareMode = vbTextCompare
-	
+    
     If Not IsForwardOnlyCursor(rs.CursorType) Then
         If Not rs.BOF Then rs.MoveFirst
         
@@ -215,71 +214,71 @@ Optional ByVal includeKeyFieldInValues As Boolean = False) As Scripting.Dictiona
     Dim fld As ADODB.Field
     If includeKeyFieldInValues Then
         Do While Not rs.EOF
-            key = rs.Fields(localKeyFieldName).value
-        
+            key = rs.Fields(localKeyFieldName).Value
+
             If Not result.Exists(key) Then
                 For Each fld In rs.Fields
-                    tempArray(i) = fld.value
+                    tempArray(i) = fld.Value
                     i = i + 1
-               
-			   Next
-                
+
+                Next
+
                 result(key) = tempArray
                 i = 0
-           
-		   End If
-            
+
+            End If
+
             rs.MoveNext
         Loop
-    
-	Else
+
+    Else
         If rs.Fields.Count > 2 Then
             Do While Not rs.EOF
-                key = rs.Fields(localKeyFieldName).value
-            
+                key = rs.Fields(localKeyFieldName).Value
+
                 If Not result.Exists(key) Then
                     For Each fld In rs.Fields
-                        If UCase$(fld.name) <> localKeyFieldName Then
-                            tempArray(i) = fld.value
+                        If UCase$(fld.Name) <> localKeyFieldName Then
+                            tempArray(i) = fld.Value
                             i = i + 1
-                      
-					  End If
-                    
-					Next
-                    
+
+                        End If
+
+                    Next
+
                     result(key) = tempArray
                     i = 0
-                
-				End If
-                
+
+                End If
+
                 rs.MoveNext
-            
-			Loop
-        
-		Else
+
+            Loop
+
+        Else
             Dim tempVal As Variant
             Do While Not rs.EOF
-                key = rs.Fields(localKeyFieldName).value
-            
+                key = rs.Fields(localKeyFieldName).Value
+
                 If Not result.Exists(key) Then
                     For Each fld In rs.Fields
-                        If UCase$(fld.name) <> localKeyFieldName Then
-                            tempVal = fld.value
-                        
-						End If
-                    
-					Next
-                    
+                        If UCase$(fld.Name) <> localKeyFieldName Then
+                            tempVal = fld.Value
+
+                        End If
+
+                    Next
+
                     result(key) = tempVal
-                
-				End If
-                
+
+                End If
+
                 rs.MoveNext
             Loop
-        
-		End If
-    
-	End If
+
+        End If
+
+    End If
 
     If Not IsForwardOnlyCursor(rs.CursorType) Then
         If Not rs.BOF Then rs.MoveFirst
@@ -290,12 +289,12 @@ Optional ByVal includeKeyFieldInValues As Boolean = False) As Scripting.Dictiona
 End Function
 
 Public Function RecordsetToArray(ByVal rs As ADODB.Recordset, ByVal transpose As Boolean) As Variant
-	Dim result As Variant 
-	
+    Dim result As Variant
+    
     If transpose Then
         Dim tempArray() As Variant
-        ReDim tempArray(rs.Recordcount - 1, rs.Fields.Count - 1)
-
+        ReDim tempArray(rs.RecordCount - 1, rs.Fields.Count - 1)
+        
         Dim recordsArray As Variant
         recordsArray = rs.GetRows()
         
@@ -304,9 +303,9 @@ Public Function RecordsetToArray(ByVal rs As ADODB.Recordset, ByVal transpose As
             For i = 0 To UBound(recordsArray, 1)
                 tempArray(j, i) = recordsArray(i, j)
             
-			Next i
-        
-		Next j
+            Next i
+            
+        Next j
         
         result = tempArray
     
@@ -320,7 +319,7 @@ Public Function RecordsetToArray(ByVal rs As ADODB.Recordset, ByVal transpose As
         
     End If
 
-	RecordsetToArray = result
+    RecordsetToArray = result
 End Function
 
 Public Function FieldNamesToArray(ByVal rs As ADODB.Recordset, Optional ByVal makeProperCase As Boolean = False, _
@@ -344,8 +343,8 @@ End Function
 
 Public Sub FieldNamesToRange(ByRef fieldsNames As Variant, ByVal destinationRange As Range, _
 Optional ByVal transpose As Boolean = False)
-	'fieldsNames must be a single dimensional array
-	'destinationRange should be like: Worksheet.Range(columnletter)
+    'fieldsNames must be a single dimensional array
+    'destinationRange should be like: Worksheet.Range(columnletter)
     Dim lowerBound As Long
     lowerBound = LBound(fieldsNames)
     
@@ -360,22 +359,22 @@ Optional ByVal transpose As Boolean = False)
         For i = lowerBound To upperBound
             result(i, lowerBound) = fieldsNames(i)
         
-		Next i
+        Next i
         
         destinationRange.Resize(upperBound).Value2 = result
-    
-	Else
+        
+    Else
         ReDim result(lowerBound To lowerBound, lowerBound To upperBound)
         
         Dim j As Long
         For j = lowerBound To upperBound
             result(lowerBound, j) = fieldsNames(j)
         
-		Next j
+        Next j
         
         destinationRange.Resize(1, upperBound + 1).Value2 = result
     
-	End If
+    End If
 End Sub
 
 
@@ -518,5 +517,3 @@ End Function
 Public Function SanitizeDelimitedfieldNames(ByVal fieldNames As String) As String
     SanitizeDelimitedfieldNames = Replace(Replace(Replace(fieldNames, ",[]", vbNullString), ", []", vbNullString), "[]", vbNullString)
 End Function
-
-
