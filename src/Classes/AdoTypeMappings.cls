@@ -53,6 +53,7 @@ End Property
 
 Private Sub Class_Initialize()
     Set mappings = New Scripting.Dictionary
+    mappings.ComapareMode = vbTextCompare
     With mappings
         .Add "Boolean", adBoolean
         .Add "Byte", adInteger
