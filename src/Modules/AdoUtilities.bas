@@ -22,29 +22,6 @@ Public Function IIfIsNullOrEmpty(ByVal value As Variant, ByVal replacement As Va
         
     End If
 End Function
-        
-Public Function IsNullOrEmpty(ByVal value As Variant) As Variant
-    If VBA.IsNull(value) Then
-        IsNullOrEmpty = True
-        
-        Exit Function
-        
-    End If
-    
-    If value = vbNullString Then
-        IsNullOrEmpty = True
-        
-        Exit Function
-        
-    End If
-    
-    If LenB(value) = 0 Then
-        IsNullOrEmpty = True
-        
-        Exit Function
-        
-    End If
-End Function
 		
 Public Function IIfIsNullOrWhiteSpace(ByVal value As Variant, ByVal replacement As Variant) As Variant
     If IsNullOrWhiteSpace(value) Then
@@ -56,35 +33,102 @@ Public Function IIfIsNullOrWhiteSpace(ByVal value As Variant, ByVal replacement 
     End If
 End Function
 
-Public Function IsNullOrWhiteSpace(ByVal text As String) As Boolean
-    If VBA.IsNull(text) Then
+Public Function IIfIsEmptyOrWhitespace(ByVal value As Variant, ByVal replacement As Variant) As Variant
+    If IsEmptyOrWhitespace(value) Then
+        IIfIsEmptyOrWhitespace = replacement
+        
+    Else
+        IIfIsEmptyOrWhitespace = value
+        
+    End If
+End Function
+
+Public Function IIfIsEmptyValue(ByVal value As Variant, ByVal replacement As Variant) As Variant
+    If IsEmptyValue(value) Then
+        IIfIsEmptyValue = replacement
+        
+    Else
+        IIfIsEmptyValue = value
+        
+    End If
+End Function
+
+Public Function IsNullOrEmpty(ByVal value As Variant) As Boolean
+    If VBA.IsNull(value) Then
+        IsNullOrEmpty = True
+        
+        Exit Function
+        
+    End If
+    
+    IsNullOrEmpty = IsEmptyValue(value)
+End Function
+
+Public Function IsNullOrWhiteSpace(ByVal value As Variant) As Boolean
+    If VBA.IsNull(value) Then
         IsNullOrWhiteSpace = True
         
         Exit Function
         
     End If
     
-    IsNullOrWhiteSpace = (LenB(RemoveNullOrWhiteSpace(text)) = 0)
+    IsNullOrWhiteSpace = (LenB(RemoveNullOrWhiteSpace(value)) = 0)
 End Function
 
-Public Function RemoveNullOrWhiteSpace(ByVal text As String) As String
-    If text = vbNullString Then
-        RemoveNullOrWhiteSpace = text
+Public Function IsEmptyOrWhitespace(ByVal value As Variant) As Boolean
+    If IsEmptyValue(value) Then 
+        IsEmptyOrWhitespace = True
         
         Exit Function
         
     End If
     
-    If IsNull(text) Then
+    IsEmptyOrWhitespace = (LenB(RemoveNullOrWhiteSpace(value)) = 0)
+End Function
+
+Public Function RemoveNullOrWhiteSpace(ByVal value As Variant) As Variant
+    If IsNull(value) Then
         RemoveNullOrWhiteSpace = vbNullString
         
         Exit Function
         
     End If
-    
-    RemoveNullOrWhiteSpace = Trim$(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(text, Chr$(0), vbNullString), Chr$(9), vbNullString), Chr$(10), vbNullString), Chr$(11), vbNullString), Chr$(12), vbNullString), Chr$(13), vbNullString), Chr$(14), vbNullString), Chr$(160), vbNullString), " ", vbNullString))
+
+    If IsEmptyValue(value) Then 
+        RemoveNullOrWhiteSpace = vbNullString
+        
+        Exit Function
+        
+    End If
+                                
+    RemoveNullOrWhiteSpace = Trim(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(value, Chr$(0), vbNullString), Chr$(9), vbNullString), Chr$(10), vbNullString), Chr$(11), vbNullString), Chr$(12), vbNullString), Chr$(13), vbNullString), Chr$(14), vbNullString), Chr$(160), vbNullString), " ", vbNullString))
 End Function
 
+Public Function IsEmptyValue(ByVal value As Variant) As Boolean 
+    If IsEmpty(value) Then
+        IsEmptyValue = True
+        
+        Exit Function
+        
+    End If
+    
+    If value = vbNullString Then
+        IsEmptyValue = True
+        
+        Exit Function
+        
+    End If
+    
+    If value = "" Then
+        IsEmptyValue = True
+        
+        Exit Function
+        
+    End If
+			
+    IsEmptyValue = (LenB(value) = 0)
+End Function 
+							
 Public Function NullIf(ByVal value As Variant, ByVal replacement As Variant) As Variant
     If VBA.IsNull(value) Then
         NullIf = replacement
