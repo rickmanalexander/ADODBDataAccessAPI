@@ -48,16 +48,16 @@ Private Sub GuardInvalidOrdinalArguments(ByVal sql As String, ByRef args() As Va
     DbErrors.GuardExpression Not this.Base.ValidateOrdinalArguments(sql, args), message:="Arguments provided are inconsistent with expected ordinal parameters."
 End Sub
 
-Private Function IDbCommand_ExecuteQuery(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteQuery(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
     DbErrors.GuardNullReference this.Connection
     DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
         
     'cannot pass ParamArray array directly to ByRef array argument
     Dim localArgs() As Variant: localArgs = args
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     Dim cmd As ADODB.Command
-    Set cmd = this.Base.CreateCommand(this.Connection, commandType, 0, sql, localArgs)
+    Set cmd = this.Base.CreateCommand(this.Connection, cmdType, 0, sql, localArgs)
     
     Dim result As ADODB.Recordset
     Set result = this.Base.Execute(cmd)
@@ -65,16 +65,16 @@ Private Function IDbCommand_ExecuteQuery(ByVal commandType As ADODB.CommandTypeE
     Set IDbCommand_ExecuteQuery = result
 End Function
 
-Private Function IDbCommand_ExecuteQueryAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteQueryAsync(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
     DbErrors.GuardNullReference this.Connection
     DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
         
     'cannot pass ParamArray array directly to ByRef array argument
     Dim localArgs() As Variant: localArgs = args
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     Dim cmd As ADODB.Command
-    Set cmd = this.Base.CreateCommand(this.Connection, commandType, 0, sql, localArgs)
+    Set cmd = this.Base.CreateCommand(this.Connection, cmdType, 0, sql, localArgs)
     
     Dim result As ADODB.Recordset
     Set result = this.Base.ExecuteAsync(cmd, True)
@@ -82,45 +82,45 @@ Private Function IDbCommand_ExecuteQueryAsync(ByVal commandType As ADODB.Command
     Set IDbCommand_ExecuteQueryAsync = result
 End Function
 
-Private Sub IDbCommand_ExecuteNonQuery(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
+Private Sub IDbCommand_ExecuteNonQuery(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
     DbErrors.GuardNullReference this.Connection
     DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
         
     'cannot pass ParamArray array directly to ByRef array argument
     Dim localArgs() As Variant: localArgs = args
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     Dim cmd As ADODB.Command
-    Set cmd = this.Base.CreateCommand(this.Connection, commandType, 0, sql, localArgs)
+    Set cmd = this.Base.CreateCommand(this.Connection, cmdType, 0, sql, localArgs)
     
     '@Ignore FunctionReturnValueDiscarded
     cmd.Execute Options:=(ExecuteOptionEnum.adExecuteNoRecords)
 End Sub
 
-Private Sub IDbCommand_ExecuteNonQueryAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
+Private Sub IDbCommand_ExecuteNonQueryAsync(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
     DbErrors.GuardNullReference this.Connection
     DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
         
     'cannot pass ParamArray array directly to ByRef array argument
     Dim localArgs() As Variant: localArgs = args
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     Dim cmd As ADODB.Command
-    Set cmd = this.Base.CreateCommand(this.Connection, commandType, 0, sql, localArgs)
+    Set cmd = this.Base.CreateCommand(this.Connection, cmdType, 0, sql, localArgs)
     
     '@Ignore FunctionReturnValueDiscarded
     cmd.Execute Options:=(ExecuteOptionEnum.adExecuteNoRecords + ExecuteOptionEnum.adAsyncExecute)
     
 End Sub
 
-Private Function IDbCommand_ExecuteWithParameters(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteWithParameters(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
     DbErrors.GuardNullReference this.Connection
     DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
     
     Dim emptyArgs() As Variant
     
     Dim cmd As ADODB.Command
-    Set cmd = this.Base.CreateCommand(this.Connection, commandType, 0, sql, emptyArgs)
+    Set cmd = this.Base.CreateCommand(this.Connection, cmdType, 0, sql, emptyArgs)
     
     Dim i As Long
     For i = LBound(params) To UBound(params)
@@ -134,14 +134,14 @@ Private Function IDbCommand_ExecuteWithParameters(ByVal commandType As ADODB.Com
     Set IDbCommand_ExecuteWithParameters = result
 End Function
 
-Private Function IDbCommand_ExecuteWithParametersAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteWithParametersAsync(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
     DbErrors.GuardNullReference this.Connection
     DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
         
     Dim emptyArgs() As Variant
     
     Dim cmd As ADODB.Command
-    Set cmd = this.Base.CreateCommand(this.Connection, commandType, 0, sql, emptyArgs)
+    Set cmd = this.Base.CreateCommand(this.Connection, cmdType, 0, sql, emptyArgs)
     
     Dim i As Long
     For i = LBound(params) To UBound(params)
@@ -178,3 +178,36 @@ Private Function IDbCommand_ExecuteScalarAsync(ByVal sql As String, ParamArray a
 End Function
 
 
+Private Function IDbCommand_ExecuteSql(ByVal sql As String, ByVal timeout As Long, ParamArray args() As Variant) As ADODB.Recordset
+    DbErrors.GuardNullReference this.Connection
+    DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
+        
+    'cannot pass ParamArray array directly to ByRef array argument
+    Dim localArgs() As Variant: localArgs = args
+    GuardInvalidOrdinalArguments sql, localArgs
+    
+    Dim cmd As ADODB.Command
+    Set cmd = this.Base.CreateCommand(this.Connection, adCmdText, timeout, sql, localArgs)
+    
+    Dim result As ADODB.Recordset
+    Set result = this.Base.Execute(cmd)
+    
+    Set IDbCommand_ExecuteSql = result
+End Function
+
+Private Function IDbCommand_ExecuteSqlAsync(ByVal sql As String, ByVal timeout As Long, ParamArray args() As Variant) As ADODB.Recordset
+    DbErrors.GuardNullReference this.Connection
+    DbErrors.GuardExpression (Not ((this.Connection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
+        
+    'cannot pass ParamArray array directly to ByRef array argument
+    Dim localArgs() As Variant: localArgs = args
+    GuardInvalidOrdinalArguments sql, localArgs
+    
+    Dim cmd As ADODB.Command
+    Set cmd = this.Base.CreateCommand(this.Connection, adCmdText, timeout, sql, localArgs)
+    
+    Dim result As ADODB.Recordset
+    Set result = this.Base.ExecuteAsync(cmd, True)
+    
+    Set IDbCommand_ExecuteSqlAsync = result
+End Function
