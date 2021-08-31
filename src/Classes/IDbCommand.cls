@@ -36,11 +36,11 @@ Public Sub ExecuteNonQueryAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVa
 End Sub
 
 
-'@Description("Returns an ADODB.Recordset that contains the results of the specified parameterized query.")
+'@Description("Returns an ADODB.Recordset that contains the result of the specified parameterized query OR Executes the specified parameterized SQL statement/command.")
 Public Function ExecuteWithParameters(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
 End Function
 
-'@Description("Returns an ADODB.Recordset that contains the results of the specified parameterized query Asynchronously.")
+'@Description("Returns an ADODB.Recordset that contains the result of the specified parameterized query OR Executes the specified parameterized SQL statement/command Asynchronously.")
 Public Function ExecuteWithParametersAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
 End Function
 
@@ -52,6 +52,16 @@ End Function
 '@Description("Returns the value of the first field of the first record returned by the specified parameterized query Asynchronously.")
 Public Function ExecuteScalarAsync(ByVal sql As String, ParamArray args() As Variant) As Variant
 End Function
+
+
+'@Description("If command execution finishes within the specified timelimit (in seconds), this returns an ADODB.Recordset that contains the result of the specified parameterized query OR Executes the specified parameterized SQL statement/command.")
+Public Function ExecuteSql(ByVal sql As String, ByVal timeout As Long, ParamArray args() As Variant) As ADODB.Recordset
+End Function
+
+'@Description("If command execution finishes within the specified timelimit (in seconds), this returns an ADODB.Recordset that contains the result of the specified parameterized query OR Executes the specified parameterized SQL statement/command Asynchronously.")
+Public Function ExecuteSqlAsync(ByVal sql As String, ByVal timeout As Long, ParamArray args() As Variant) As ADODB.Recordset
+End Function
+
 
 Private Sub Class_Initialize()
     Err.Raise 5, VBA.TypeName(Me), "An Interface must not be instantiated."
