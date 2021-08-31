@@ -25,7 +25,7 @@ Attribute State.VB_Description = "Gets the state of the wrapped ADODB connection
 End Property
 
 '@Description("Creates an ADODB.Command that uses the wrapped Connection")
-Public Function CreateCommand(ByVal commandType As ADODB.CommandTypeEnum, ByVal commandTimeout As Long, ByVal sql As String) As ADODB.Command
+  Public Function CreateCommand(ByVal cmdType As ADODB.CommandTypeEnum, ByVal timeout As Long, ByVal sql As String) As ADODB.Command
 Attribute CreateCommand.VB_Description = "Creates an ADODB.Command that uses the wrapped connection"
 End Function
 
