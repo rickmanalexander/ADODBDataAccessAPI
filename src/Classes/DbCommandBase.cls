@@ -38,14 +38,14 @@ Friend Property Set ParameterProvider(ByVal value As IParameterProvider)
     Set this.ParameterProvider = value
 End Property
 
-Private Function CreateCommand(ByVal db As IDbConnection, ByVal commandType As ADODB.CommandTypeEnum, ByVal commandTimeout As Long, ByVal sql As String, ByRef args() As Variant) As ADODB.Command
+Private Function CreateCommand(ByVal db As IDbConnection, ByVal cmdType As ADODB.CommandTypeEnum, ByVal timeout As Long, ByVal sql As String, ByRef args() As Variant) As ADODB.Command
     DbErrors.GuardNullReference db
     DbErrors.GuardEmptyString sql
     DbErrors.GuardExpression (Not ((db.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
-    If commandType = adCmdText Then DbErrors.GuardExpression Not ValidateOrdinalArguments(sql, args), message:="Arguments supplied are inconsistent with the provided command string parameters."
+    If cmdType = adCmdText Then DbErrors.GuardExpression Not ValidateOrdinalArguments(sql, args), message:="Arguments supplied are inconsistent with the provided command string parameters."
 
     Dim cmd As ADODB.Command
-    Set cmd = db.CreateCommand(commandType, commandTimeout, sql)
+    Set cmd = db.CreateCommand(cmdType, timeout, sql)
     
     On Error GoTo CleanFail
     Dim arg As ADODB.Parameter
@@ -150,8 +150,8 @@ Private Function ExecuteScalarAsync(ByVal db As IDbConnection, ByVal sql As Stri
     ExecuteScalarAsync = result
 End Function
 
-Private Function IDbCommandBase_CreateCommand(ByVal db As IDbConnection, ByVal commandType As ADODB.CommandTypeEnum, ByVal commandTimeout As Long, ByVal sql As String, ByRef args() As Variant) As ADODB.Command
-    Set IDbCommandBase_CreateCommand = CreateCommand(db, commandType, commandTimeout, sql, args)
+Private Function IDbCommandBase_CreateCommand(ByVal db As IDbConnection, ByVal cmdType As ADODB.CommandTypeEnum, ByVal timeout As Long, ByVal sql As String, ByRef args() As Variant) As ADODB.Command
+    Set IDbCommandBase_CreateCommand = CreateCommand(db, cmdType, timeout, sql, args)
 End Function
 
 Private Function IDbCommandBase_Execute(ByVal cmd As ADODB.Command) As ADODB.Recordset
