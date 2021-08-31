@@ -14,10 +14,6 @@ Attribute VB_Description = "Represents an object abstracting a database command.
 '@Exposed
 Option Explicit
 
-''@Description("Gets Default wait time (in seconds) before terminating the attempt to execute a command and generating an error.")
-'Public Property Get DefaultCommandTimeout() As Long
-'End Property
-
 '@Description("Returns an ADODB.Recordset that contains the results of the specified parameterized query.")
 Public Function ExecuteQuery(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
 End Function
