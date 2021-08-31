@@ -41,19 +41,19 @@ End Sub
 
 Private Sub AdoConnection_BeginTransComplete(ByVal TransactionLevel As Long, ByVal pError As ADODB.Error, adStatus As ADODB.EventStatusEnum, ByVal pConnection As ADODB.Connection)
     If Not pError Is Nothing Then
-        DbErrors.RethrowOnError pError, pConnection.commandTimeout
+        DbErrors.RethrowOnError pError, pConnection.CommandTimeout
     End If
 End Sub
 
 Private Sub AdoConnection_CommitTransComplete(ByVal pError As ADODB.Error, adStatus As ADODB.EventStatusEnum, ByVal pConnection As ADODB.Connection)
     If Not pError Is Nothing Then
-        DbErrors.RethrowOnError pError, pConnection.commandTimeout
+        DbErrors.RethrowOnError pError, pConnection.CommandTimeout
     End If
 End Sub
 
 Private Sub AdoConnection_ConnectComplete(ByVal pError As ADODB.Error, adStatus As ADODB.EventStatusEnum, ByVal pConnection As ADODB.Connection)
     If Not pError Is Nothing Then
-        DbErrors.RethrowOnError pError, pConnection.commandTimeout
+        DbErrors.RethrowOnError pError, pConnection.CommandTimeout
     End If
 End Sub
 
@@ -62,19 +62,19 @@ End Sub
 
 Private Sub AdoConnection_ExecuteComplete(ByVal RecordsAffected As Long, ByVal pError As ADODB.Error, adStatus As ADODB.EventStatusEnum, ByVal pCommand As ADODB.Command, ByVal pRecordset As ADODB.Recordset, ByVal pConnection As ADODB.Connection)
     If Not pError Is Nothing Then
-        DbErrors.RethrowOnError pError, pConnection.commandTimeout
+        DbErrors.RethrowOnError pError, pConnection.CommandTimeout
     End If
 End Sub
 
 Private Sub AdoConnection_InfoMessage(ByVal pError As ADODB.Error, adStatus As ADODB.EventStatusEnum, ByVal pConnection As ADODB.Connection)
     If Not pError Is Nothing Then
-        DbErrors.RethrowOnError pError, pConnection.commandTimeout
+        DbErrors.RethrowOnError pError, pConnection.CommandTimeout
     End If
 End Sub
 
 Private Sub AdoConnection_RollbackTransComplete(ByVal pError As ADODB.Error, adStatus As ADODB.EventStatusEnum, ByVal pConnection As ADODB.Connection)
     If Not pError Is Nothing Then
-        DbErrors.RethrowOnError pError, pConnection.commandTimeout
+        DbErrors.RethrowOnError pError, pConnection.CommandTimeout
     End If
 End Sub
 
@@ -114,7 +114,7 @@ Private Sub IDbConnection_CommitTransaction()
     HasActiveTransaction = False
 End Sub
 
-Private Function IDbConnection_CreateCommand(ByVal commandType As ADODB.CommandTypeEnum, ByVal commandTimeout As Long, ByVal sql As String) As ADODB.Command
+Private Function IDbConnection_CreateCommand(ByVal cmdType As ADODB.CommandTypeEnum, ByVal timeout As Long, ByVal sql As String) As ADODB.Command
     DbErrors.GuardEmptyString sql
     DbErrors.GuardExpression (Not ((AdoConnection.State And adStateOpen) = adStateOpen)), message:="Connection is not open."
     
@@ -122,8 +122,8 @@ Private Function IDbConnection_CreateCommand(ByVal commandType As ADODB.CommandT
     Set result = New ADODB.Command
     
     Set result.ActiveConnection = AdoConnection
-    result.commandType = commandType
-    result.commandTimeout = commandTimeout
+    result.CommandType = cmdType
+    result.CommandTimeout = timeout
     result.CommandText = sql
     
     Set IDbConnection_CreateCommand = result
