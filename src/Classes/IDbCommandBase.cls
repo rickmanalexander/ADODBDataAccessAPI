@@ -15,7 +15,7 @@ Attribute VB_Description = "Defines an explicit public interface for the DbComma
 Option Explicit
 
 '@Description("Creates and returns an ADODB.Command, without executing it.")
-Public Function CreateCommand(ByVal db As IDbConnection, ByVal commandType As ADODB.CommandTypeEnum, ByVal commandTimeout As Long, ByVal sql As String, ByRef args() As Variant) As ADODB.Command
+Public Function CreateCommand(ByVal db As IDbConnection, ByVal cmdType As ADODB.CommandTypeEnum, ByVal timeout As Long, ByVal sql As String, ByRef args() As Variant) As ADODB.Command
 Attribute CreateCommand.VB_Description = "Creates and returns an ADODB.Command, without executing it."
 End Function
 
