@@ -58,14 +58,14 @@ Private Sub GuardInvalidOrdinalArguments(ByVal sql As String, ByRef args() As Va
     DbErrors.GuardExpression Not this.Base.ValidateOrdinalArguments(sql, args), message:="Arguments provided are inconsistent with expected ordinal parameters."
 End Sub
 
-Private Function IDbCommand_ExecuteQuery(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteQuery(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
     Dim localArgs() As Variant
     localArgs = args 'cannot pass ParamArray array directly to ByRef array argument
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     With this.ConnectionFactory.Create(this.ConnectionString)
         Dim cmd As ADODB.Command
-        Set cmd = this.Base.CreateCommand(.Self, commandType, 0, sql, localArgs)
+        Set cmd = this.Base.CreateCommand(.Self, cmdType, 0, sql, localArgs)
         
         Dim result As ADODB.Recordset
         Set result = this.Base.Execute(cmd)
@@ -76,14 +76,14 @@ Private Function IDbCommand_ExecuteQuery(ByVal commandType As ADODB.CommandTypeE
     End With
 End Function
 
-Private Function IDbCommand_ExecuteQueryAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteQueryAsync(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant) As ADODB.Recordset
     Dim localArgs() As Variant
     localArgs = args 'cannot pass ParamArray array directly to ByRef array argument
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     With this.ConnectionFactory.Create(this.ConnectionString)
         Dim cmd As ADODB.Command
-        Set cmd = this.Base.CreateCommand(.Self, commandType, 0, sql, localArgs)
+        Set cmd = this.Base.CreateCommand(.Self, cmdType, 0, sql, localArgs)
         
         Dim result As ADODB.Recordset
         Set result = this.Base.ExecuteAsync(cmd, True)
@@ -94,44 +94,44 @@ Private Function IDbCommand_ExecuteQueryAsync(ByVal commandType As ADODB.Command
     End With
 End Function
 
-Private Sub IDbCommand_ExecuteNonQuery(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
+Private Sub IDbCommand_ExecuteNonQuery(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
     Dim localArgs() As Variant
     localArgs = args 'cannot pass ParamArray array directly to ByRef array argument
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     With this.ConnectionFactory.Create(this.ConnectionString)
         Dim cmd As ADODB.Command
-        Set cmd = this.Base.CreateCommand(.Self, commandType, 0, sql, localArgs)
+        Set cmd = this.Base.CreateCommand(.Self, cmdType, 0, sql, localArgs)
         
         '@Ignore FunctionReturnValueDiscarded
         cmd.Execute Options:=(ExecuteOptionEnum.adExecuteNoRecords)
     End With
 End Sub
 
-Private Sub IDbCommand_ExecuteNonQueryAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
+Private Sub IDbCommand_ExecuteNonQueryAsync(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray args() As Variant)
     Dim localArgs() As Variant
     localArgs = args 'cannot pass ParamArray array directly to ByRef array argument
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localArgs
     
     With this.ConnectionFactory.Create(this.ConnectionString)
         Dim cmd As ADODB.Command
-        Set cmd = this.Base.CreateCommand(.Self, commandType, 0, sql, localArgs)
+        Set cmd = this.Base.CreateCommand(.Self, cmdType, 0, sql, localArgs)
         
         '@Ignore FunctionReturnValueDiscarded
         cmd.Execute Options:=(ExecuteOptionEnum.adExecuteNoRecords + ExecuteOptionEnum.adAsyncExecute)
     End With
 End Sub
 
-Private Function IDbCommand_ExecuteWithParameters(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteWithParameters(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
     Dim localParams() As Variant
     localParams = params
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localParams
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localParams
 
     With this.ConnectionFactory.Create(this.ConnectionString)
         Dim emptyArgs() As Variant
         
         Dim cmd As ADODB.Command
-        Set cmd = this.Base.CreateCommand(.Self, commandType, 0, sql, emptyArgs)
+        Set cmd = this.Base.CreateCommand(.Self, cmdType, 0, sql, emptyArgs)
         
         Dim i As Long
         For i = LBound(params) To UBound(params)
@@ -148,16 +148,16 @@ Private Function IDbCommand_ExecuteWithParameters(ByVal commandType As ADODB.Com
     End With
 End Function
 
-Private Function IDbCommand_ExecuteWithParametersAsync(ByVal commandType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
+Private Function IDbCommand_ExecuteWithParametersAsync(ByVal cmdType As ADODB.CommandTypeEnum, ByVal sql As String, ParamArray params() As Variant) As ADODB.Recordset
     Dim localParams() As Variant
     localParams = params
-    If commandType = adCmdText Then GuardInvalidOrdinalArguments sql, localParams
+    If cmdType = adCmdText Then GuardInvalidOrdinalArguments sql, localParams
 
     With this.ConnectionFactory.Create(this.ConnectionString)
         Dim emptyArgs() As Variant
         
         Dim cmd As ADODB.Command
-        Set cmd = this.Base.CreateCommand(.Self, commandType, 0, sql, emptyArgs)
+        Set cmd = this.Base.CreateCommand(.Self, cmdType, 0, sql, emptyArgs)
         
         Dim i As Long
         For i = LBound(params) To UBound(params)
@@ -193,3 +193,40 @@ Private Function IDbCommand_ExecuteScalarAsync(ByVal sql As String, ParamArray a
         IDbCommand_ExecuteScalarAsync = this.Base.ExecuteScalarAsync(.Self, sql, localArgs)
     End With
 End Function
+                                                      
+
+Private Function IDbCommand_ExecuteSql(ByVal sql As String, ByVal timeout As Long, ParamArray args() As Variant) As ADODB.Recordset
+    Dim localArgs() As Variant
+    localArgs = args 'cannot pass ParamArray array directly to ByRef array argument
+    GuardInvalidOrdinalArguments sql, localArgs
+    
+    With this.ConnectionFactory.Create(this.ConnectionString)
+        Dim cmd As ADODB.Command
+        Set cmd = this.Base.CreateCommand(.Self, adCmdText, timeout, sql, localArgs)
+        
+        Dim result As ADODB.Recordset
+        Set result = this.Base.Execute(cmd)
+        
+        Set result.ActiveConnection = Nothing
+        
+        Set IDbCommand_ExecuteSql = result
+    End With
+End Function
+
+Private Function IDbCommand_ExecuteSqlAsync(ByVal sql As String, ByVal timeout As Long, ParamArray args() As Variant) As ADODB.Recordset
+    Dim localArgs() As Variant
+    localArgs = args 'cannot pass ParamArray array directly to ByRef array argument
+    GuardInvalidOrdinalArguments sql, localArgs
+    
+    With this.ConnectionFactory.Create(this.ConnectionString)
+        Dim cmd As ADODB.Command
+        Set cmd = this.Base.CreateCommand(.Self, adCmdText, timeout, sql, localArgs)
+        
+        Dim result As ADODB.Recordset
+        Set result = this.Base.ExecuteAsync(cmd, True)
+        
+        Set result.ActiveConnection = Nothing
+        
+        Set IDbCommand_ExecuteSqlAsync = result
+    End With
+End Function                                                      
