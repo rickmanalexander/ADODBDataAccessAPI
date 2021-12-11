@@ -712,8 +712,15 @@ End Function
 Public Function GetWorkbookConnectionString(ByVal workbookFileFullPath As String, ByVal datsetHasHeaders As Boolean, ByVal queryAsText As Boolean)
     Dim result As String
     result = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & workbookFileFullPath & _
-             ";Extended Properties='Excel 12.0"
+             ";Extended Properties='"
                 
+    Dim extendedProperty As String
+    DbErrors.GuardExpression Not TryGetExcelFileTypeConnectionStringExtendedProperty(workbookFileFullPath, extendedProperty), _
+        message:="Could not retrieve Excel file type extended property for connection string due to incorrect file type/extentsion." & _
+        "Accepted file types are .xlsx, .xlsm, .xlsb, .xls."
+    
+    result = result & extendedProperty
+    
     result = result & IIf(datsetHasHeaders, ";HDR=YES", ";HDR=NO")
     
     If queryAsText Then result = result & ";IMEX=1"
@@ -721,6 +728,34 @@ Public Function GetWorkbookConnectionString(ByVal workbookFileFullPath As String
     result = result & "'"
     
     GetWorkbookConnectionString = result
+End Function
+
+Private Function TryGetExcelFileTypeConnectionStringExtendedProperty(ByVal workbookFileFullPath As String, ByRef returnExtendedProperty As String) As Boolean
+    returnExtendedProperty = vbNullString
+    
+    Dim fileExtentsion As String
+    fileExtentsion = LCase$(Trim$(GetFileExtenstion(workbookFileFullPath)))
+    
+    Select Case fileExtentsion
+        Case "xlsb"
+            returnExtendedProperty = "Excel 12.0"
+            
+        Case "xlsx"
+            returnExtendedProperty = "Excel 12.0 Xml"
+            
+        Case "xlsm"
+            returnExtendedProperty = "Excel 12.0 Macro"
+        
+        Case "xls"
+            returnExtendedProperty = "Excel 8.0"
+            
+    End Select
+        
+    TryGetExcelFileTypeConnectionStringExtendedProperty = (LenB(Trim$(Replace(returnExtendedProperty, " ", vbNullString))) > 0)
+End Function
+
+Private Function GetFileExtenstion(ByVal fileFullNameOrPath As String) As String
+    GetFileExtenstion = Right$(fileFullNameOrPath, (Len(fileFullNameOrPath) - InStrRev(fileFullNameOrPath, ".")))
 End Function
 
 
